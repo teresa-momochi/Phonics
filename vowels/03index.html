@@ -111,7 +111,6 @@
         <button id="speaker-btn" onclick="speak()">🔊</button>
         <div class="hint-text">Listen! Is it Short or Long?</div>
         <div class="options-grid" id="options-container">
-            <!-- 按鈕會動態生成 -->
         </div>
     </div>
 
@@ -121,7 +120,8 @@
         <p style="font-size: 18px; font-weight: bold; color: #666;">Well Done!</p>
         
         <div class="nav-buttons">
-            <button class="nav-btn" onclick="location.href='01index.html'">
+            <!-- ⭐ 唯一修改 -->
+            <button class="nav-btn" onclick="location.href='start.html'">
                 🍎 Try "Short Vowels" Again!
             </button>
             <button class="nav-btn" onclick="location.href='02index.html'">
@@ -195,7 +195,6 @@
             isLocked = true;
 
             if(selected === correct) {
-                // 這裡加入答對音效
                 new Audio('correct.mp3').play().catch(()=>{}); 
                 score += 5;
                 document.getElementById('score-display').innerText = `Score: ${score}`;
