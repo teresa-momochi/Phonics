@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome</title>
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family: Arial;
+  background: linear-gradient(135deg,#ff6a00,#ff9966);
+  color:white;
+}
+
+.card{
+  background: rgba(255,255,255,0.15);
+  padding:40px;
+  border-radius:20px;
+  text-align:center;
+  width:320px;
+  backdrop-filter: blur(10px);
+}
+
+h1{
+  margin-bottom:10px;
+}
+
+p{
+  font-size:16px;
+  margin:15px 0;
+}
+
+button{
+  margin-top:20px;
+  padding:12px 25px;
+  font-size:18px;
+  border:none;
+  border-radius:10px;
+  background:white;
+  color:#ff6a00;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#ffe0cc;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h1>🎧 聽力挑戰</h1>
+
+  <p>試試看你對<br><b>短母音 Short Vowels</b><br>的認識有多強！</p>
+
+  <p>👉 點擊喇叭聽聲音<br>
+     👉 選出正確單字</p>
+
+  <button onclick="startGame()">開始挑戰 ▶</button>
+</div>
+
+<script>
+function startGame(){
+  location.href = "index.html";
+}
+</script>
+
+</body>
+</html>
