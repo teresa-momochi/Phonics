@@ -110,6 +110,11 @@
 </head>
 <body>
 
+<button onclick="location.href='teacher.html'" 
+style="position:absolute; top:10px; left:10px; z-index:999; padding:10px 15px; border-radius:10px; border:none; background:white; font-weight:bold;">
+← 回首頁
+</button>
+
     <div class="glass-container" id="quiz-area">
         <div id="feedback-overlay">
             <div class="correct-ans-label">Correct Answer:</div>
@@ -133,7 +138,6 @@
         <h2>MISSION COMPLETE</h2>
         <div class="big-score" id="final-score">0</div>
         <p>POINTS</p>
-        <!-- 這裡的按鈕會被 JS 產生的二選一按鈕取代 -->
         <button class="option-btn" onclick="location.reload()" style="margin-top:20px; width:100%;">Play Again</button>
     </div>
 
@@ -225,32 +229,25 @@
         }
 
         function showResult() {
-            // 隱藏測驗區
             document.getElementById('quiz-area').style.display = 'none';
-            
-            // 顯示結果螢幕
             const resultScreen = document.getElementById('result-screen');
             resultScreen.style.display = 'block';
             document.getElementById('final-score').innerText = score;
             new Audio('cheer.mp3').play().catch(()=>{});
 
-            // 處理按鈕：隱藏原有 Play Again，新增二選一容器
             const originalBtn = resultScreen.querySelector('button');
             if (originalBtn) originalBtn.style.display = 'none';
 
-            // 建立按鈕容器
             const actionContainer = document.createElement('div');
             actionContainer.className = "options-grid";
             actionContainer.style.marginTop = "30px";
             
-            // 選項 1: 重新挑戰 Short Vowels
             const btnRetry = document.createElement('button');
             btnRetry.className = 'option-btn';
             btnRetry.style.background = "rgba(255, 255, 255, 0.15)";
             btnRetry.innerHTML = "🔄 Play 'Short Vowels' Again";
             btnRetry.onclick = () => location.reload();
 
-            // 選項 2: 進入 Long Vowels (加強視覺導引)
             const btnNext = document.createElement('button');
             btnNext.className = 'option-btn';
             btnNext.style.background = "rgba(255, 255, 255, 0.3)";
