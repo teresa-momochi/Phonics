@@ -98,7 +98,14 @@
         .nav-btn:hover { border-color: #a1c4fd; background: #f0f7ff; }
     </style>
 </head>
+
 <body>
+
+<button onclick="location.href='teacher.html'" 
+style="position:absolute; top:10px; left:10px; z-index:999; padding:10px 15px; border-radius:10px; border:none; background:white; font-weight:bold;">
+← 回首頁
+</button>
+
     <div class="glass-box" id="game-area">
         <div id="feedback-overlay">
             <div style="font-size: 20px;">Correct Answer:</div>
@@ -120,7 +127,6 @@
         <p style="font-size: 18px; font-weight: bold; color: #666;">Well Done!</p>
         
         <div class="nav-buttons">
-            <!-- ⭐ 唯一修改 -->
             <button class="nav-btn" onclick="location.href='start.html'">
                 🍎 Try "Short Vowels" Again!
             </button>
