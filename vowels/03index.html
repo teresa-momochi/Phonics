@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akey Online Studio</title>
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.7);
+            --text-color: #333333;
+            --error-red: rgba(255, 80, 80, 0.9);
+        }
+        * { box-sizing: border-box; font-family: 'Arial Rounded MT Bold', sans-serif; }
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(120deg, #fff5f5, #fff9f0, #f0fff0, #f0faff, #f5f0ff);
+            background-size: 400% 400%;
+            animation: flow 20s ease infinite;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        @keyframes flow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .glass-box {
+            width: 90%;
+            max-width: 420px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 2px solid var(--glass-border);
+            border-radius: 40px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center;
+            position: relative;
+        }
+        #feedback-overlay {
+            display: none;
+            position: absolute;
+            top:0; left:0; width:100%; height:100%;
+            background: var(--error-red);
+            border-radius: 40px;
+            z-index: 10;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            animation: fadeIn 0.2s;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .header-info { display: flex; justify-content: space-between; font-size: 16px; color: #666; margin-bottom: 20px; }
+        #speaker-btn {
+            font-size: 100px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: transform 0.2s;
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));
+        }
+        #speaker-btn:active { transform: scale(0.9); }
+        .hint-text { font-size: 18px; color: #555; margin-bottom: 20px; font-weight: bold; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .option-btn {
+            background: white;
+            border: 2px solid #eee;
+            padding: 25px 10px;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #444;
+            width: 100%;
+        }
+        .option-btn:hover { border-color: #a1c4fd; background: #f0f7ff; }
+        .option-btn:active { transform: scale(0.95); }
+        #result-screen { display: none; }
+        .score-big { font-size: 100px; color: #ff7675; margin: 20px 0; }
+        .nav-buttons { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+        .nav-btn {
+            background: white;
+            border: 2px solid #eee;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #444;
+            width: 100%;
+            text-decoration: none;
+            display: block;
+        }
+        .nav-btn:hover { border-color: #a1c4fd; background: #f0f7ff; }
+    </style>
+</head>
+<body>
+    <div class="glass-box" id="game-area">
+        <div id="feedback-overlay">
+            <div style="font-size: 20px;">Correct Answer:</div>
+            <div id="correct-word-display" style="font-size: 60px; font-weight: bold;">CAT</div>
+        </div>
+        <div class="header-info">
+            <span id="q-count">Question: 1/20</span>
+            <span id="score-display">Score: 0</span>
+        </div>
+        <button id="speaker-btn" onclick="speak()">🔊</button>
+        <div class="hint-text">Listen! Is it Short or Long?</div>
+        <div class="options-grid" id="options-container">
+            <!-- 按鈕會動態生成 -->
+        </div>
+    </div>
+
+    <div class="glass-box" id="result-screen">
+        <h2>Challenge Complete!</h2>
+        <div class="score-big" id="final-score">0</div>
+        <p style="font-size: 18px; font-weight: bold; color: #666;">Well Done!</p>
+        
+        <div class="nav-buttons">
+            <button class="nav-btn" onclick="location.href='01index.html'">
+                🍎 Try "Short Vowels" Again!
+            </button>
+            <button class="nav-btn" onclick="location.href='02index.html'">
+                🍰 Try "Long Vowels" Again!
+            </button>
+            <button class="nav-btn" onclick="location.reload()" style="background: rgba(255,255,255,0.5);">
+                🔄 Try "Mixed Vowels" Again!
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const mixedPool = [
+            { target: "cat", options: ["cat", "cake"] },
+            { target: "cake", options: ["cat", "cake"] },
+            { target: "bit", options: ["bit", "bite"] },
+            { target: "bite", options: ["bit", "bite"] },
+            { target: "hop", options: ["hop", "hope"] },
+            { target: "hope", options: ["hop", "hope"] },
+            { target: "cut", options: ["cut", "cute"] },
+            { target: "cute", options: ["cut", "cute"] },
+            { target: "mad", options: ["mad", "made"] },
+            { target: "made", options: ["mad", "made"] },
+            { target: "pin", options: ["pin", "pine"] },
+            { target: "pine", options: ["pin", "pine"] },
+            { target: "not", options: ["not", "note"] },
+            { target: "note", options: ["not", "note"] },
+            { target: "cub", options: ["cub", "cube"] },
+            { target: "cube", options: ["cub", "cube"] },
+            { target: "can", options: ["can", "cane"] },
+            { target: "cane", options: ["can", "cane"] },
+            { target: "rid", options: ["rid", "ride"] },
+            { target: "ride", options: ["rid", "ride"] }
+        ];
+
+        let currentIdx = 0;
+        let score = 0;
+        let isLocked = false;
+        let gameData = [...mixedPool].sort(() => Math.random() - 0.5).slice(0, 20);
+
+        function initQuestion() {
+            isLocked = false;
+            document.getElementById('feedback-overlay').style.display = 'none';
+            const q = gameData[currentIdx];
+            document.getElementById('q-count').innerText = `Question: ${currentIdx + 1}/20`;
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            const opts = [...q.options].sort(() => Math.random() - 0.5);
+            opts.forEach(word => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = word;
+                btn.onclick = () => check(word, q.target);
+                container.appendChild(btn);
+            });
+
+            setTimeout(speak, 500);
+        }
+
+        function speak() {
+            if(isLocked) return;
+            const utter = new SpeechSynthesisUtterance(gameData[currentIdx].target);
+            utter.lang = 'en-US';
+            utter.rate = 0.7; 
+            window.speechSynthesis.speak(utter);
+        }
+
+        function check(selected, correct) {
+            if(isLocked) return;
+            isLocked = true;
+
+            if(selected === correct) {
+                // 這裡加入答對音效
+                new Audio('correct.mp3').play().catch(()=>{}); 
+                score += 5;
+                document.getElementById('score-display').innerText = `Score: ${score}`;
+                next();
+            } else {
+                new Audio('wrong.mp3').play().catch(()=>{});
+                document.getElementById('correct-word-display').innerText = correct.toUpperCase();
+                document.getElementById('feedback-overlay').style.display = 'flex';
+                setTimeout(next, 2000); 
+            }
+        }
+
+        function next() {
+            currentIdx++;
+            if(currentIdx < gameData.length) {
+                initQuestion();
+            } else {
+                document.getElementById('game-area').style.display = 'none';
+                document.getElementById('result-screen').style.display = 'block';
+                document.getElementById('final-score').innerText = score;
+            }
+        }
+
+        initQuestion();
+    </script>
+</body>
+</html>
