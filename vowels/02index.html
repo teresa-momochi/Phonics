@@ -101,7 +101,14 @@
         .big-score { font-size: 110px; font-weight: bold; margin: 15px 0; color: #ff6b6b; text-shadow: 0 4px 0px #fff; }
     </style>
 </head>
+
 <body>
+
+<button onclick="location.href='teacher.html'" 
+style="position:absolute; top:10px; left:10px; z-index:999; padding:10px 15px; border-radius:10px; border:none; background:white; font-weight:bold;">
+← 回首頁
+</button>
+
     <div class="glass-container" id="quiz-area">
         <div id="feedback-overlay">
             <div class="correct-ans-label">Watch Out! It's:</div>
@@ -125,7 +132,6 @@
         <div class="big-score" id="final-score">0</div>
         <p style="font-size: 18px; font-weight: bold;">TOTAL POINTS</p>
         
-        <!-- 修改後的按鈕區域 -->
         <div class="options-grid" style="margin-top: 25px;">
             <button class="option-btn" onclick="location.reload()" style="background: rgba(255,255,255,0.5);">
                 🔄 Play Long Vowels Again
@@ -217,14 +223,11 @@
         }
 
         function showResult() {
-            // 隱藏題目區，顯示結果區
             document.getElementById('quiz-area').style.display = 'none';
             const resultScreen = document.getElementById('result-screen');
             resultScreen.style.display = 'block';
             document.getElementById('final-score').innerText = score;
             new Audio('cheer.mp3').play().catch(()=>{});
-            
-            // 已移除原本的自動倒數計時邏輯，改為讓使用者點擊按鈕
         }
 
         loadQuestion();
